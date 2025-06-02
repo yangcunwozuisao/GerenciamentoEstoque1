@@ -1,65 +1,82 @@
-# 📦 Backend Containerizado com AWS
+# 📦 Sistema de Gerenciamento de Estoque na AWS
 
-Este projeto apresenta uma aplicação backend containerizada e escalável, desenvolvida na disciplina **Serviços em Nuvem** sob orientação do professor **Daniel Zou**, por **Danilo Ye**. A solução utiliza os principais serviços da AWS, incluindo **ECS Fargate**, **Amazon RDS**, **API Gateway** e **AWS Lambda**.
+Este projeto apresenta uma solução de backend containerizado para um **sistema de gerenciamento de estoque**, desenvolvida na disciplina **Serviços em Nuvem** sob orientação do professor **Joaqui Pessoa Filho**, por **Danile Zou e Danilo Ye**. O sistema foi implantado na AWS utilizando serviços como **ECS Fargate**, **Amazon RDS**, **API Gateway** e **AWS Lambda**.
 
-## 📌 Descrição Geral
+## 📌 Objetivo
 
-A arquitetura proposta segue uma abordagem segura e modular. As requisições dos usuários são processadas por um gateway de entrada e roteadas para uma API RESTful hospedada em contêineres. Uma função Lambda separada é responsável pela geração de relatórios sob demanda, consumindo a própria API via HTTP.
+Desenvolver e implantar uma aplicação escalável e segura para **controlar o estoque de produtos**, com funcionalidades de cadastro, consulta, atualização e remoção de itens, além da geração de relatórios dinâmicos via API.
 
-## 🔧 Tecnologias Utilizadas
+## 🧱 Arquitetura Utilizada
 
-- **Amazon ECS (Fargate)** – Execução dos contêineres backend
-- **Amazon RDS (MySQL)** – Banco de dados relacional em sub-rede privada
-- **Amazon API Gateway** – Roteamento de requisições para a API e Lambda
-- **AWS Lambda** – Função serverless para a rota `/report`
-- **Amazon CloudWatch** – Monitoramento de logs
-- **Amazon ECR** – Armazenamento de imagem Docker
-- **VPC, Sub-redes, NAT Gateway** – Infraestrutura de rede segura
+A arquitetura da solução segue boas práticas da AWS, com separação entre as camadas, sub-redes privadas, uso de serviços gerenciados e uma função serverless desacoplada para análise de dados.
+
+### Componentes:
+
+- **API REST** hospedada em **ECS Fargate**
+- **Banco de Dados** MySQL via **Amazon RDS** (sem IP público)
+- **API Gateway** como ponto de entrada seguro
+- **AWS Lambda** para rota de relatório `/report`
+- **CloudWatch Logs** para monitoramento
+
+## 🛠 Tecnologias e Serviços
+
+- **Node.js + Express** (backend da API)
+- **Amazon ECS (Fargate)**
+- **Amazon RDS (MySQL)**
+- **Amazon API Gateway**
+- **AWS Lambda**
+- **Amazon CloudWatch**
+- **Amazon ECR**
+- **VPC, NAT Gateway, Sub-redes privadas e públicas**
 
 ## 🔄 Funcionalidades
 
-### API RESTful (Node.js)
+### 📁 API de Estoque
 
-| Rota             | Método | Descrição                      |
-|------------------|--------|--------------------------------|
-| `/items`         | GET    | Lista todos os itens           |
-| `/items`         | POST   | Cria um novo item              |
-| `/items/{id}`    | PUT    | Atualiza um item existente     |
-| `/items/{id}`    | DELETE | Remove um item                 |
+| Rota             | Método | Descrição                        |
+|------------------|--------|----------------------------------|
+| `/items`         | GET    | Lista todos os produtos          |
+| `/items`         | POST   | Adiciona um novo item ao estoque |
+| `/items/{id}`    | PUT    | Atualiza dados de um item        |
+| `/items/{id}`    | DELETE | Remove um item do estoque        |
 
-### Relatório via Lambda
+### 📊 Relatórios
 
-| Rota       | Método | Descrição                                |
-|------------|--------|--------------------------------------------|
-| `/report`  | GET    | Gera estatísticas com base nos dados da API |
+| Rota       | Método | Descrição                                       |
+|------------|--------|-------------------------------------------------|
+| `/report`  | GET    | Retorna estatísticas como total de itens, média de estoque, etc. |
 
-## 🔐 Segurança
+A rota `/report` é tratada por uma função **AWS Lambda**, que consome a API de forma indireta via HTTP, sem acesso direto ao banco.
 
-- O banco RDS não possui IP público
-- O ECS Fargate opera em sub-redes privadas
-- A comunicação entre serviços é controlada por grupos de segurança
-- O acesso externo ocorre exclusivamente via API Gateway
+## 🔐 Segurança e Escopo
 
-## 🖥️ Diagrama da Arquitetura
+- Recursos sensíveis estão isolados em **sub-redes privadas**
+- A comunicação entre serviços é protegida por **Security Groups**
+- O banco de dados não é acessível externamente
+- Apenas o **API Gateway** expõe a aplicação ao público
+
+## 📷 Diagrama da Arquitetura
 
 ![Diagrama da Arquitetura](img/diagrama_arq.png)
 
-## 📽️ Vídeo Demonstrativo
+## 🎥 Demonstração em Vídeo
 
-> O vídeo apresenta a execução das operações CRUD, a chamada à rota `/report`, e a arquitetura de serviços utilizada.  
-> Disponível em: [link_do_video.mp4]
+> Acesse a demonstração completa com operações CRUD, execução da função `/report` e visualização de recursos no console AWS.  
+> **Link para o vídeo:** [disponível aqui]
 
-## 🧪 Testes e Logs
+## 📈 Logs e Monitoramento
 
-- Testes realizados via Postman
-- Logs disponíveis no Amazon CloudWatch para a API e Lambda
-- A função Lambda consome a API de forma desacoplada
+- **CloudWatch Logs** habilitado para ECS e Lambda
+- Monitoração de chamadas, erros e tempo de resposta
+- Possibilidade de integração com **AWS X-Ray** (não incluído nesta versão)
 
 ## 👨‍💻 Autor
 
+**Daniel Zou**  
 **Danilo Ye**  
-Disciplina: *Serviços em Nuvem*  
-Professor: *Daniel Zou*
+*Aluno – Sistemas de Informação*  
+**Disciplina:** Serviços em Nuvem  
+**Professor:** Joaquim Pessoa Filho
 
 ---
 
