@@ -42,7 +42,7 @@ A arquitetura proposta segue uma abordagem segura e modular. As requisições do
 
 ## 🖥️ Diagrama da Arquitetura
 
-![Diagrama da Arquitetura](/img/diagrama_arquitetura.png)
+![Diagrama da Arquitetura](img/diagrama_arq.png)
 
 ## 📽️ Vídeo Demonstrativo
 
